@@ -36,11 +36,15 @@ def create_data_fetcher_agent() -> autogen.ConversableAgent:
     - Optimize data structure for the target UI component
     """
     
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError("OPENAI_API_KEY environment variable must be set")
+    
     llm_config = {
         "config_list": [
             {
                 "model": "gpt-4",
-                "api_key": os.getenv("OPENAI_API_KEY", "your-api-key")
+                "api_key": api_key
             }
         ],
         "temperature": 0.3,  # Lower temperature for more consistent data handling

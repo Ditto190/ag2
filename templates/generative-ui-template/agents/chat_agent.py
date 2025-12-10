@@ -34,11 +34,15 @@ def create_chat_ui_agent() -> autogen.ConversableAgent:
     
     # Use the shared get_llm_config function from backend.agents
     # In production, import: from backend.agents import get_llm_config
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError("OPENAI_API_KEY environment variable must be set")
+    
     llm_config = {
         "config_list": [
             {
                 "model": "gpt-4",
-                "api_key": os.getenv("OPENAI_API_KEY", "your-api-key")
+                "api_key": api_key
             }
         ],
         "temperature": 0.7,

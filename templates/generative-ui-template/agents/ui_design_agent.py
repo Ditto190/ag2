@@ -40,11 +40,15 @@ def create_ui_design_agent() -> autogen.ConversableAgent:
     - Accessibility attributes (ARIA labels, roles, etc.)
     """
     
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError("OPENAI_API_KEY environment variable must be set")
+    
     llm_config = {
         "config_list": [
             {
                 "model": "gpt-4",
-                "api_key": os.getenv("OPENAI_API_KEY", "your-api-key")
+                "api_key": api_key
             }
         ],
         "temperature": 0.7,
@@ -106,11 +110,15 @@ def create_accessibility_checker_agent() -> autogen.ConversableAgent:
     Provide specific recommendations for improvements.
     """
     
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError("OPENAI_API_KEY environment variable must be set")
+    
     llm_config = {
         "config_list": [
             {
                 "model": "gpt-4",
-                "api_key": os.getenv("OPENAI_API_KEY", "your-api-key")
+                "api_key": api_key
             }
         ],
         "temperature": 0.5,
