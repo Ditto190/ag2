@@ -5,6 +5,7 @@ This example shows how to create a conversational agent that can
 dynamically generate UI components based on natural language conversation.
 """
 
+import os
 import autogen
 from typing import Dict, Any
 
@@ -31,11 +32,13 @@ def create_chat_ui_agent() -> autogen.ConversableAgent:
     the user's actual needs.
     """
     
+    # Use the shared get_llm_config function from backend.agents
+    # In production, import: from backend.agents import get_llm_config
     llm_config = {
         "config_list": [
             {
                 "model": "gpt-4",
-                "api_key": "your-api-key"  # Replace with actual key
+                "api_key": os.getenv("OPENAI_API_KEY", "your-api-key")
             }
         ],
         "temperature": 0.7,

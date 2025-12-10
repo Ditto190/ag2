@@ -24,8 +24,9 @@ def get_llm_config() -> dict:
     
     if os.path.exists("OAI_CONFIG_LIST"):
         try:
-            config = autogen.LLMConfig.from_json(path="OAI_CONFIG_LIST")
-            config_list = config.config_list
+            import json
+            with open("OAI_CONFIG_LIST", "r") as f:
+                config_list = json.load(f)
         except Exception as e:
             print(f"Warning: Could not load OAI_CONFIG_LIST: {e}")
     

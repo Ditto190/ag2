@@ -43,7 +43,7 @@ def check_python_version():
     print_status("Checking Python version...", "info")
     
     version = sys.version_info
-    if version.major == 3 and 10 <= version.minor < 14:
+    if version.major == 3 and 10 <= version.minor <= 13:
         print_status(f"Python {version.major}.{version.minor}.{version.micro} - Compatible", "success")
         return True
     else:

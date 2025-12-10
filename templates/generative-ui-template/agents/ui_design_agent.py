@@ -5,6 +5,7 @@ This agent specializes in creating well-designed, accessible UI components
 following modern design principles.
 """
 
+import os
 import autogen
 from typing import Dict, Any, List
 
@@ -43,7 +44,7 @@ def create_ui_design_agent() -> autogen.ConversableAgent:
         "config_list": [
             {
                 "model": "gpt-4",
-                "api_key": "your-api-key"  # Replace with actual key
+                "api_key": os.getenv("OPENAI_API_KEY", "your-api-key")
             }
         ],
         "temperature": 0.7,
@@ -109,7 +110,7 @@ def create_accessibility_checker_agent() -> autogen.ConversableAgent:
         "config_list": [
             {
                 "model": "gpt-4",
-                "api_key": "your-api-key"
+                "api_key": os.getenv("OPENAI_API_KEY", "your-api-key")
             }
         ],
         "temperature": 0.5,

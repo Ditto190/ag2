@@ -5,6 +5,7 @@ This agent handles data fetching, processing, and formatting for UI components.
 It can connect to various data sources and prepare data for visualization.
 """
 
+import os
 import autogen
 from typing import Dict, Any, List, Optional
 
@@ -39,7 +40,7 @@ def create_data_fetcher_agent() -> autogen.ConversableAgent:
         "config_list": [
             {
                 "model": "gpt-4",
-                "api_key": "your-api-key"
+                "api_key": os.getenv("OPENAI_API_KEY", "your-api-key")
             }
         ],
         "temperature": 0.3,  # Lower temperature for more consistent data handling
