@@ -122,9 +122,18 @@ async def websocket_generate(websocket: WebSocket):
 async def chat(request: BaseModel):
     """
     Simple chat endpoint for conversational interactions.
+    
+    Note: This is a placeholder endpoint. In production, implement:
+    1. Message history management
+    2. Agent conversation handling
+    3. Proper response formatting
+    
+    See the /api/generate endpoint for a working example.
     """
-    # Implement chat logic here
-    return {"message": "Chat endpoint - implement your logic"}
+    return {
+        "message": "Chat endpoint - implement your logic here",
+        "note": "This is a placeholder. See /docs for API documentation."
+    }
 
 
 if __name__ == "__main__":

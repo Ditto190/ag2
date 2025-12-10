@@ -168,6 +168,13 @@ class AgentWorkflow:
         """
         Stream the agent workflow results.
         
+        Note: This is a simplified streaming implementation for demonstration.
+        In production, you should:
+        1. Hook into AG2's native streaming capabilities
+        2. Stream individual agent messages as they're generated
+        3. Implement proper error handling and recovery
+        4. Add progress indicators
+        
         Args:
             query: User query
             context: Additional context
@@ -176,7 +183,7 @@ class AgentWorkflow:
             Dictionaries containing agent messages and components
         """
         # For now, simulate streaming with the full result
-        # In production, you'd hook into AG2's streaming capabilities
+        # TODO: Implement real streaming by hooking into AG2's streaming API
         result = await self.run(query, context)
         
         for component in result["components"]:

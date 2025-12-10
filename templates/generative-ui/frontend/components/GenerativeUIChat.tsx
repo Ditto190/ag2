@@ -93,7 +93,7 @@ export function GenerativeUIChat() {
             <p className="text-lg mb-4">👋 Hello! How can I help you today?</p>
             <div className="space-y-2 text-sm">
               <p className="font-medium">Try asking:</p>
-              <ul className="space-y-1">
+              <ul className="space-y-1 list-none" role="list">
                 <li>&quot;Create a dashboard for sales data&quot;</li>
                 <li>&quot;Show me a contact form&quot;</li>
                 <li>&quot;Generate a pricing table&quot;</li>

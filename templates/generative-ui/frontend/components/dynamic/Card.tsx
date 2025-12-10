@@ -43,7 +43,12 @@ export function Card({ title, content, data, actions }: CardProps) {
             <button
               key={idx}
               className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-              onClick={() => console.log('Action:', action.action)}
+              onClick={() => {
+                // TODO: Implement proper action handling
+                // This is a placeholder - in production, dispatch actions to your backend
+                console.log('Action triggered:', action.action);
+                alert(`Action: ${action.label}\nThis is a placeholder. Implement your action handler.`);
+              }}
             >
               {action.label}
             </button>
