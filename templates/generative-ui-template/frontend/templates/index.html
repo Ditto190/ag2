@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}Generative UI with AG2 - Home{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1 class="hero-title">Welcome to Generative UI</h1>
+    <p class="hero-subtitle">Build dynamic, AI-driven interfaces with AG2 agents</p>
+</div>
+
+<div class="demo-section">
+    <h2>Try It Out</h2>
+    <p>Tell us what kind of interface you need, and our AI agents will generate it for you.</p>
+    
+    <!-- Intent Input -->
+    <div class="input-section">
+        <textarea 
+            id="intentInput" 
+            class="intent-input" 
+            placeholder="E.g., 'Create a user registration form' or 'Show me a dashboard with analytics'"
+            rows="3"
+        ></textarea>
+        <button id="generateBtn" class="btn btn-primary">Generate UI</button>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="loading-state" style="display: none;">
+        <div class="spinner"></div>
+        <p>AI agents are generating your UI...</p>
+    </div>
+
+    <!-- Generated UI Container -->
+    <div id="generatedUI" class="generated-ui">
+        <!-- Dynamic UI will be rendered here -->
+    </div>
+</div>
+
+<div class="features-section">
+    <h2>Features</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🤖</div>
+            <h3>AI-Powered</h3>
+            <p>Leverages AG2 agents to understand your needs and generate appropriate UI components.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Real-time</h3>
+            <p>WebSocket support enables live updates and streaming UI generation.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <h3>Dynamic</h3>
+            <p>Components adapt based on context, data, and user interactions.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔧</div>
+            <h3>Customizable</h3>
+            <p>Easily extend with your own agents, tools, and UI templates.</p>
+        </div>
+    </div>
+</div>
+
+<div class="examples-section">
+    <h2>Quick Examples</h2>
+    <div class="examples-grid">
+        <button class="example-btn" data-intent="Create a contact form with name, email, and message fields">
+            📝 Contact Form
+        </button>
+        <button class="example-btn" data-intent="Show me a dashboard with user metrics and charts">
+            📊 Dashboard
+        </button>
+        <button class="example-btn" data-intent="Display a table of users with their information">
+            📋 Data Table
+        </button>
+        <button class="example-btn" data-intent="Create a chat interface for AI conversation">
+            💬 Chat Interface
+        </button>
+    </div>
+</div>
+
+<div class="info-section">
+    <h2>How It Works</h2>
+    <ol class="steps-list">
+        <li>
+            <strong>Describe Your Need:</strong> Tell the system what kind of UI you want in natural language.
+        </li>
+        <li>
+            <strong>AI Analysis:</strong> AG2 agents analyze your intent and determine the best UI components.
+        </li>
+        <li>
+            <strong>Dynamic Generation:</strong> The system generates appropriate UI specifications.
+        </li>
+        <li>
+            <strong>Render & Interact:</strong> The UI is rendered in real-time and ready for interaction.
+        </li>
+    </ol>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+        const intentInput = document.getElementById('intentInput');
+        const generateBtn = document.getElementById('generateBtn');
+        const loadingState = document.getElementById('loadingState');
+        const generatedUI = document.getElementById('generatedUI');
+        const exampleBtns = document.querySelectorAll('.example-btn');
+
+        // Handle generate button click
+        generateBtn.addEventListener('click', async function() {
+            const intent = intentInput.value.trim();
+            if (!intent) {
+                alert('Please describe what UI you need.');
+                return;
+            }
+            await generateUI(intent);
+        });
+
+        // Handle example button clicks
+        exampleBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const intent = this.getAttribute('data-intent');
+                intentInput.value = intent;
+                generateUI(intent);
+            });
+        });
+
+        // Generate UI function
+        async function generateUI(intent) {
+            // Show loading state
+            loadingState.style.display = 'block';
+            generatedUI.innerHTML = '';
+            generateBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/generate-ui', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        intent: intent,
+                        context: {}
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate UI');
+                }
+
+                const uiData = await response.json();
+                
+                // Hide loading state
+                loadingState.style.display = 'none';
+                
+                // Render the generated UI
+                renderUI(uiData);
+                
+            } catch (error) {
+                console.error('Error generating UI:', error);
+                loadingState.style.display = 'none';
+                generatedUI.innerHTML = `
+                    <div class="error-message">
+                        <p>Error generating UI. Please try again.</p>
+                        <p class="error-detail">${error.message}</p>
+                    </div>
+                `;
+            } finally {
+                generateBtn.disabled = false;
+            }
+        }
+
+        // Render UI components
+        function renderUI(uiData) {
+            const container = document.getElementById('generatedUI');
+            container.innerHTML = '';
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'ui-component-wrapper';
+
+            // Add title if present
+            if (uiData.title) {
+                const title = document.createElement('h3');
+                title.textContent = uiData.title;
+                wrapper.appendChild(title);
+            }
+
+            // Add description if present
+            if (uiData.description) {
+                const desc = document.createElement('p');
+                desc.className = 'component-description';
+                desc.textContent = uiData.description;
+                wrapper.appendChild(desc);
+            }
+
+            // Render based on component type
+            const componentElement = createComponentElement(uiData);
+            wrapper.appendChild(componentElement);
+
+            container.appendChild(wrapper);
+        }
+
+        // Create component element based on type
+        function createComponentElement(data) {
+            // This is handled by the shared app.js
+            return window.UIComponentRenderer.render(data);
+        }
+    });
+</script>
+{% endblock %}

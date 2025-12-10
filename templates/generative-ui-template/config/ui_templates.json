@@ -1,0 +1,174 @@
+{
+  "form": {
+    "type": "form",
+    "layout": "vertical",
+    "defaultStyle": {
+      "fieldSpacing": "1rem",
+      "labelPosition": "top",
+      "inputBorder": "1px solid #E5E7EB",
+      "inputPadding": "0.75rem",
+      "inputBorderRadius": "0.375rem"
+    },
+    "validationRules": {
+      "email": {
+        "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+        "message": "Please enter a valid email address"
+      },
+      "required": {
+        "message": "This field is required"
+      },
+      "minLength": {
+        "message": "Minimum length is {min} characters"
+      },
+      "maxLength": {
+        "message": "Maximum length is {max} characters"
+      }
+    }
+  },
+  "table": {
+    "type": "table",
+    "defaultStyle": {
+      "headerBackground": "#F9FAFB",
+      "headerColor": "#1F2937",
+      "borderColor": "#E5E7EB",
+      "hoverBackground": "#F9FAFB",
+      "cellPadding": "0.75rem"
+    },
+    "features": {
+      "pagination": true,
+      "sorting": true,
+      "filtering": false,
+      "search": false
+    },
+    "defaultPagination": {
+      "itemsPerPage": 10,
+      "showPageNumbers": true,
+      "showTotal": true
+    }
+  },
+  "dashboard": {
+    "type": "dashboard",
+    "layouts": {
+      "grid": {
+        "columns": 3,
+        "gap": "1.5rem",
+        "responsive": true
+      },
+      "flex": {
+        "direction": "row",
+        "wrap": true,
+        "gap": "1rem"
+      }
+    },
+    "widgetTypes": [
+      "metric",
+      "chart",
+      "table",
+      "text"
+    ]
+  },
+  "chart": {
+    "type": "chart",
+    "defaultStyle": {
+      "height": "300px",
+      "responsive": true,
+      "maintainAspectRatio": false
+    },
+    "chartTypes": [
+      "line",
+      "bar",
+      "pie",
+      "doughnut",
+      "radar",
+      "scatter"
+    ],
+    "defaultColors": [
+      "#3B82F6",
+      "#10B981",
+      "#F59E0B",
+      "#EF4444",
+      "#8B5CF6",
+      "#EC4899"
+    ]
+  },
+  "chat": {
+    "type": "chat",
+    "defaultStyle": {
+      "height": "500px",
+      "messagePadding": "0.75rem",
+      "messageSpacing": "0.75rem",
+      "borderRadius": "0.5rem"
+    },
+    "messageStyles": {
+      "user": {
+        "background": "#DBEAFE",
+        "align": "right",
+        "color": "#1F2937"
+      },
+      "assistant": {
+        "background": "#F3F4F6",
+        "align": "left",
+        "color": "#1F2937"
+      }
+    },
+    "features": {
+      "typing_indicator": true,
+      "timestamps": true,
+      "file_upload": false,
+      "voice_input": false
+    }
+  },
+  "card": {
+    "type": "card",
+    "defaultStyle": {
+      "padding": "1.5rem",
+      "borderRadius": "0.5rem",
+      "boxShadow": "0 1px 3px rgba(0,0,0,0.1)",
+      "backgroundColor": "#FFFFFF"
+    },
+    "variants": {
+      "outlined": {
+        "border": "1px solid #E5E7EB",
+        "boxShadow": "none"
+      },
+      "elevated": {
+        "boxShadow": "0 10px 15px -3px rgba(0,0,0,0.1)"
+      }
+    }
+  },
+  "button": {
+    "type": "button",
+    "variants": {
+      "primary": {
+        "background": "#3B82F6",
+        "color": "#FFFFFF",
+        "hoverBackground": "#2563EB"
+      },
+      "secondary": {
+        "background": "#6B7280",
+        "color": "#FFFFFF",
+        "hoverBackground": "#4B5563"
+      },
+      "outline": {
+        "background": "transparent",
+        "border": "1px solid #3B82F6",
+        "color": "#3B82F6",
+        "hoverBackground": "#DBEAFE"
+      }
+    },
+    "sizes": {
+      "small": {
+        "padding": "0.5rem 0.75rem",
+        "fontSize": "0.875rem"
+      },
+      "medium": {
+        "padding": "0.75rem 1.5rem",
+        "fontSize": "1rem"
+      },
+      "large": {
+        "padding": "1rem 2rem",
+        "fontSize": "1.125rem"
+      }
+    }
+  }
+}

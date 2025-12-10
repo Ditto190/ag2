@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - HOST=0.0.0.0
+      - PORT=8000
+      - RELOAD=true
+    volumes:
+      # Mount code for development (hot reload)
+      - ./backend:/app/backend
+      - ./frontend:/app/frontend
+      - ./agents:/app/agents
+      - ./config:/app/config
+      # Don't mount these
+      - /app/backend/__pycache__
+    restart: unless-stopped
+    networks:
+      - generative-ui-network
+
+  # Optional: Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - generative-ui-network
+
+  # Optional: PostgreSQL database
+  # postgres:
+  #   image: postgres:15-alpine
+  #   environment:
+  #     POSTGRES_DB: generative_ui
+  #     POSTGRES_USER: user
+  #     POSTGRES_PASSWORD: password
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   restart: unless-stopped
+  #   networks:
+  #     - generative-ui-network
+
+networks:
+  generative-ui-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+  # postgres-data:

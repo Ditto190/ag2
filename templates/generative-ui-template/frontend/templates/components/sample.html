@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Component</title>
+</head>
+<body>
+    <!-- Sample Card Component -->
+    <div class="card-component">
+        <div class="card-header">
+            <h3>{{ title }}</h3>
+        </div>
+        <div class="card-body">
+            <p>{{ content }}</p>
+        </div>
+        {% if actions %}
+        <div class="card-footer">
+            {% for action in actions %}
+            <button class="btn btn-{{ action.style }}">{{ action.label }}</button>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Sample Form Component -->
+    <form class="form-component">
+        {% for field in fields %}
+        <div class="form-group">
+            <label for="{{ field.name }}">{{ field.label }}</label>
+            {% if field.type == 'textarea' %}
+            <textarea 
+                id="{{ field.name }}" 
+                name="{{ field.name }}"
+                placeholder="{{ field.placeholder }}"
+                {% if field.required %}required{% endif %}
+            ></textarea>
+            {% else %}
+            <input 
+                type="{{ field.type }}" 
+                id="{{ field.name }}" 
+                name="{{ field.name }}"
+                placeholder="{{ field.placeholder }}"
+                {% if field.required %}required{% endif %}
+            />
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <!-- Sample Table Component -->
+    <table class="table-component">
+        <thead>
+            <tr>
+                {% for header in headers %}
+                <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                {% for cell in row %}
+                <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

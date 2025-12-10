@@ -1,0 +1,84 @@
+# Agent Configuration for Generative UI Application
+
+# Coordinator Agent Settings
+coordinator:
+  name: "coordinator"
+  model: "gpt-4"
+  temperature: 0.7
+  max_tokens: 2000
+  role: "UI coordination and orchestration"
+
+# UI Generator Agent Settings
+ui_generator:
+  name: "ui_generator"
+  model: "gpt-4"
+  temperature: 0.7
+  max_tokens: 3000
+  role: "UI component generation"
+  capabilities:
+    - forms
+    - tables
+    - dashboards
+    - charts
+    - chat_interfaces
+
+# Data Handler Agent Settings
+data_handler:
+  name: "data_handler"
+  model: "gpt-4"
+  temperature: 0.3
+  max_tokens: 2000
+  role: "Data fetching and processing"
+  data_sources:
+    - mock_api
+    - database
+    - external_api
+
+# Chat Assistant Agent Settings
+chat_assistant:
+  name: "chat_assistant"
+  model: "gpt-4"
+  temperature: 0.8
+  max_tokens: 1500
+  role: "Conversational interface"
+  personality: "friendly and helpful"
+
+# UI Design Agent Settings
+ui_design:
+  name: "ui_design_expert"
+  model: "gpt-4"
+  temperature: 0.7
+  max_tokens: 2500
+  role: "UI/UX design optimization"
+  design_principles:
+    - modern
+    - accessible
+    - responsive
+    - user_friendly
+
+# System-wide Settings
+system:
+  default_timeout: 120
+  max_retries: 3
+  enable_logging: true
+  log_level: "INFO"
+  
+# UI Component Templates
+ui_templates:
+  form:
+    default_style: "modern"
+    validation: true
+    
+  table:
+    pagination: true
+    items_per_page: 10
+    sortable: true
+    
+  dashboard:
+    layout: "grid"
+    responsive: true
+    
+  chart:
+    library: "chart.js"
+    responsive: true
+    animations: true
