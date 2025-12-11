@@ -1,0 +1,30 @@
+# MCP Storage and Runtime Files
+storage/
+*.pdf
+*.txt
+context_docs/
+.mcp_server_pids
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local

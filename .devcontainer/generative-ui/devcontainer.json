@@ -1,0 +1,89 @@
+{
+    "name": "AG2 Generative UI with MCP",
+    "image": "mcr.microsoft.com/devcontainers/python:3.11",
+    "secrets": {
+        "OAI_CONFIG_LIST": {
+            "description": "OpenAI configuration list. Required for OpenAI-related features. Can be set later as an environment variable."
+        },
+        "OPENAI_API_KEY": {
+            "description": "OpenAI API key. Required for OpenAI-related features. Can be set later as an environment variable."
+        },
+        "ANTHROPIC_API_KEY": {
+            "description": "Anthropic API key. Optional for Claude model support. Can be set later as an environment variable."
+        },
+        "GEMINI_API_KEY": {
+            "description": "Google Gemini API key. Optional for Gemini model support. Can be set later as an environment variable."
+        }
+    },
+    "shutdownAction": "stopContainer",
+    "workspaceFolder": "/workspaces/ag2",
+    "runArgs": [
+        "--name",
+        "generative-ui-mcp-ag2"
+    ],
+    "remoteEnv": {
+        "OAI_CONFIG_LIST": "${localEnv:OAI_CONFIG_LIST}",
+        "OPENAI_API_KEY": "${localEnv:OPENAI_API_KEY}",
+        "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}",
+        "GEMINI_API_KEY": "${localEnv:GEMINI_API_KEY}",
+        "MCP_STORAGE_PATH": "${containerWorkspaceFolder}/.devcontainer/generative-ui/mcp/storage",
+        "MCP_CONTEXT_PATH": "${containerWorkspaceFolder}/.devcontainer/generative-ui/mcp/context_docs"
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": true,
+            "installOhMyZsh": true,
+            "configureZshAsDefaultShell": true,
+            "username": "vscode",
+            "userUid": "1000",
+            "userGid": "1000"
+        },
+        "ghcr.io/devcontainers/features/node:1": {},
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/git-lfs:1": {}
+    },
+    "updateContentCommand": "bash .devcontainer/generative-ui/setup.sh",
+    "forwardPorts": [8000, 8001, 8002],
+    "portsAttributes": {
+        "8000": {
+            "label": "MCP ArXiv Server",
+            "onAutoForward": "notify"
+        },
+        "8001": {
+            "label": "MCP Filesystem Server",
+            "onAutoForward": "notify"
+        },
+        "8002": {
+            "label": "MCP Wikipedia Server",
+            "onAutoForward": "notify"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.linting.enabled": true,
+                "python.testing.pytestEnabled": true,
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": "always"
+                },
+                "[python]": {
+                    "editor.defaultFormatter": "ms-python.black-formatter"
+                },
+                "editor.rulers": [
+                    120
+                ]
+            },
+            "extensions": [
+                "ms-python.python",
+                "ms-python.black-formatter",
+                "ms-toolsai.jupyter",
+                "ms-toolsai.vscode-jupyter-cell-tags",
+                "ms-toolsai.jupyter-keymap",
+                "ms-toolsai.jupyter-renderers",
+                "ms-python.vscode-pylance",
+                "copilotkit.copilotkit"
+            ]
+        }
+    }
+}
