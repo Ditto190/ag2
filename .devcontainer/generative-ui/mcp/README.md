@@ -120,7 +120,7 @@ MCP supports two transport modes:
 - **Example**:
   ```python
   from autogen.mcp.mcp_client import StdioConfig
-  
+
   config = StdioConfig(
       server_name="arxiv",
       command="python",
@@ -135,7 +135,7 @@ MCP supports two transport modes:
 - **Example**:
   ```python
   from autogen.mcp.mcp_client import SseConfig
-  
+
   config = SseConfig(
       server_name="arxiv",
       url="http://localhost:8000"
@@ -158,11 +158,11 @@ async def main():
         command="python",
         args=["servers/mcp_arxiv.py", "stdio", "--storage-path", "./papers"]
     )
-    
+
     manager = MCPClientSessionManager()
     async with manager.open_session(config) as session:
         toolkit = await create_toolkit(session=session)
-        
+
         # Call tools directly
         search_tool = next(t for t in toolkit.tools if t.name == "search_arxiv")
         results, _ = await search_tool.func_or_tool(query="machine learning", max_results=3)
@@ -178,24 +178,24 @@ from autogen.agentchat import AssistantAgent, UserProxyAgent
 
 async def main():
     # ... setup session and toolkit as above ...
-    
+
     assistant = AssistantAgent(
         name="research_agent",
         system_message="You are a research assistant.",
         llm_config={"model": "gpt-4o-mini"}
     )
-    
+
     # Register toolkit with agent
     toolkit.register_for_llm(assistant)
-    
+
     user_proxy = UserProxyAgent(
         name="user",
         human_input_mode="NEVER",
         code_execution_config=False,
     )
-    
+
     toolkit.register_for_execution(user_proxy)
-    
+
     # Agent can now use MCP tools automatically
     await user_proxy.a_initiate_chat(
         assistant,
@@ -211,17 +211,17 @@ from autogen.tools import Toolkit
 
 async def main():
     manager = MCPClientSessionManager()
-    
+
     async with (
         manager.open_session(arxiv_config) as arxiv_session,
         manager.open_session(wiki_config) as wiki_session
     ):
         arxiv_toolkit = await create_toolkit(session=arxiv_session)
         wiki_toolkit = await create_toolkit(session=wiki_session)
-        
+
         # Combine toolkits
         combined = Toolkit(tools=arxiv_toolkit.tools + wiki_toolkit.tools)
-        
+
         # Register combined toolkit with agent
         combined.register_for_llm(assistant)
 ```

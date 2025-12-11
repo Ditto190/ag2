@@ -31,22 +31,22 @@ MODE="${1:-stdio}"
 if [ "$MODE" = "sse" ]; then
     echo "Starting servers in SSE mode (HTTP)..."
     echo ""
-    
+
     # Start ArXiv server on port 8000
     echo "Starting MCP ArXiv server on port 8000..."
     python "$SERVERS_DIR/mcp_arxiv.py" sse --storage-path "$STORAGE_DIR/papers" &
     ARXIV_PID=$!
-    
+
     # Start Filesystem server on port 8001
     echo "Starting MCP Filesystem server on port 8001..."
     python "$SERVERS_DIR/mcp_filesystem.py" sse --context-path "$SCRIPT_DIR/context_docs" &
     FILESYSTEM_PID=$!
-    
+
     # Start Wikipedia server on port 8002
     echo "Starting MCP Wikipedia server on port 8002..."
     python "$SERVERS_DIR/mcp_wikipedia.py" sse --storage-path "$STORAGE_DIR/articles" &
     WIKIPEDIA_PID=$!
-    
+
     echo ""
     echo "==============================================="
     echo "MCP servers running in background:"
@@ -58,11 +58,11 @@ if [ "$MODE" = "sse" ]; then
     echo "To stop servers, run:"
     echo "  kill $ARXIV_PID $FILESYSTEM_PID $WIKIPEDIA_PID"
     echo ""
-    
+
     # Save PIDs to file for easy cleanup
     echo "$ARXIV_PID $FILESYSTEM_PID $WIKIPEDIA_PID" > "$SCRIPT_DIR/.mcp_server_pids"
     echo "PIDs saved to $SCRIPT_DIR/.mcp_server_pids"
-    
+
 elif [ "$MODE" = "stdio" ]; then
     echo "Servers configured for stdio mode."
     echo "Use them in your client code with StdioConfig."

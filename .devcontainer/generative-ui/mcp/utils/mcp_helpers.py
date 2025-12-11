@@ -22,17 +22,17 @@ async def create_stdio_session(
 ) -> tuple[MCPClientSessionManager, ClientSession]:
     """
     Create an MCP client session using stdio transport.
-    
+
     Args:
         server_name: Name identifier for the MCP server
         command: Command to execute (e.g., "python")
         args: List of arguments for the command
         environment: Optional environment variables
         working_dir: Optional working directory for the server process
-        
+
     Returns:
         Tuple of (session_manager, session)
-        
+
     Example:
         >>> manager, session = await create_stdio_session(
         ...     server_name="arxiv",
@@ -47,10 +47,10 @@ async def create_stdio_session(
         environment=environment,
         working_dir=working_dir,
     )
-    
+
     manager = MCPClientSessionManager()
     session = None
-    
+
     async with manager.open_session(config) as sess:
         session = sess
         return manager, session
@@ -64,16 +64,16 @@ async def create_sse_session(
 ) -> tuple[MCPClientSessionManager, ClientSession]:
     """
     Create an MCP client session using SSE (Server-Sent Events) transport.
-    
+
     Args:
         server_name: Name identifier for the MCP server
         url: URL of the SSE server endpoint
         headers: Optional HTTP headers to send
         timeout: HTTP request timeout in seconds
-        
+
     Returns:
         Tuple of (session_manager, session)
-        
+
     Example:
         >>> manager, session = await create_sse_session(
         ...     server_name="arxiv",
@@ -86,10 +86,10 @@ async def create_sse_session(
         headers=headers,
         timeout=timeout,
     )
-    
+
     manager = MCPClientSessionManager()
     session = None
-    
+
     async with manager.open_session(config) as sess:
         session = sess
         return manager, session
@@ -106,7 +106,7 @@ async def mcp_toolkit_context(
 ) -> AsyncIterator[tuple[ClientSession, "Toolkit"]]:  # type: ignore
     """
     Context manager that creates an MCP session and toolkit, automatically cleaning up.
-    
+
     Args:
         server_name: Name identifier for the MCP server
         command: Command to execute
@@ -114,10 +114,10 @@ async def mcp_toolkit_context(
         use_mcp_tools: Whether to include MCP tools in the toolkit
         use_mcp_resources: Whether to include MCP resources in the toolkit
         resource_download_folder: Optional folder for downloading resources
-        
+
     Yields:
         Tuple of (session, toolkit)
-        
+
     Example:
         >>> async with mcp_toolkit_context(
         ...     server_name="arxiv",
@@ -128,15 +128,15 @@ async def mcp_toolkit_context(
         ...     toolkit.register_for_llm(agent)
     """
     from autogen.mcp import create_toolkit
-    
+
     config = StdioConfig(
         server_name=server_name,
         command=command,
         args=args,
     )
-    
+
     manager = MCPClientSessionManager()
-    
+
     async with manager.open_session(config) as session:
         toolkit = await create_toolkit(
             session=session,
@@ -150,14 +150,14 @@ async def mcp_toolkit_context(
 def get_default_mcp_config(server_type: str, base_path: Path | None = None) -> dict:
     """
     Get default configuration for common MCP servers.
-    
+
     Args:
         server_type: Type of server ("arxiv", "filesystem", "wikipedia")
         base_path: Base path for storage/context directories
-        
+
     Returns:
         Dictionary with server configuration
-        
+
     Example:
         >>> config = get_default_mcp_config("arxiv", Path("/workspace"))
         >>> print(config)
@@ -165,7 +165,7 @@ def get_default_mcp_config(server_type: str, base_path: Path | None = None) -> d
     """
     if base_path is None:
         base_path = Path.cwd()
-    
+
     configs = {
         "arxiv": {
             "server_name": "arxiv",
@@ -198,8 +198,8 @@ def get_default_mcp_config(server_type: str, base_path: Path | None = None) -> d
             ],
         },
     }
-    
+
     if server_type not in configs:
         raise ValueError(f"Unknown server type: {server_type}. Available: {list(configs.keys())}")
-    
+
     return configs[server_type]

@@ -50,7 +50,7 @@ The Generative UI devcontainer integrates:
 ### 🔧 Included MCP Servers
 
 1. **ArXiv Server**: Search and retrieve academic papers
-2. **Wikipedia Server**: Search and retrieve encyclopedia articles  
+2. **Wikipedia Server**: Search and retrieve encyclopedia articles
 3. **Filesystem Server**: Sandboxed access to context documents
 
 ### 📦 Pre-installed Dependencies

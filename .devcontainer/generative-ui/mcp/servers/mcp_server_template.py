@@ -30,11 +30,11 @@ CONFIG_PATH = Path(args.config_path).resolve() if args.config_path else None
 def example_tool(query: str, max_results: int = 5) -> list[str]:
     """
     Example tool that demonstrates basic MCP tool structure.
-    
+
     Args:
         query: The search query string
         max_results: Maximum number of results to return (default: 5)
-        
+
     Returns:
         List of result strings
     """
@@ -47,10 +47,10 @@ def example_tool(query: str, max_results: int = 5) -> list[str]:
 def example_data_retrieval(item_id: str) -> dict[str, str]:
     """
     Example tool for retrieving structured data.
-    
+
     Args:
         item_id: The unique identifier for the item to retrieve
-        
+
     Returns:
         Dictionary containing item data
     """
@@ -67,11 +67,11 @@ def example_data_retrieval(item_id: str) -> dict[str, str]:
 def example_action(action_type: str, parameters: dict) -> str:
     """
     Example tool for performing actions.
-    
+
     Args:
         action_type: Type of action to perform
         parameters: Action-specific parameters as a dictionary
-        
+
     Returns:
         Status message indicating action result
     """

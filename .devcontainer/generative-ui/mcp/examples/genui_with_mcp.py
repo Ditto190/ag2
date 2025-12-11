@@ -21,17 +21,17 @@ from autogen.mcp.mcp_client import StdioConfig
 async def setup_mcp_genui_agent():
     """
     Set up an MCP-enabled AG2 agent for Generative UI applications.
-    
+
     This function demonstrates:
     - Connecting to an MCP server (ArXiv in this case)
     - Creating a toolkit from MCP tools
     - Registering tools with an AG2 agent
     - Using the agent to retrieve and process data for UI generation
     """
-    
+
     # Get the base path
     base_path = Path(__file__).parent.parent.parent.parent.parent
-    
+
     # Configure the MCP server connection (stdio transport for local development)
     server_params = StdioConfig(
         server_name="arxiv",
@@ -43,36 +43,36 @@ async def setup_mcp_genui_agent():
             str(base_path / ".devcontainer/generative-ui/mcp/storage/papers"),
         ],
     )
-    
+
     print("=" * 60)
     print("Starting MCP ArXiv Server Connection...")
     print("=" * 60)
-    
+
     # Create session manager and open session
     from autogen.mcp.mcp_client import MCPClientSessionManager
-    
+
     manager = MCPClientSessionManager()
-    
+
     async with manager.open_session(server_params) as session:
         print("✓ Connected to MCP ArXiv server")
-        
+
         # Create toolkit from MCP tools
         toolkit = await create_toolkit(
             session=session,
             use_mcp_tools=True,
             use_mcp_resources=False,
         )
-        
+
         print(f"✓ Created toolkit with {len(toolkit.tools)} tools")
         for tool in toolkit.tools:
             print(f"  - {tool.name}: {tool.description}")
-        
+
         # Configure LLM (using OpenAI GPT-4 as example)
         llm_config = {
             "model": "gpt-4o-mini",
             "api_type": "openai",
         }
-        
+
         # Create an agent with MCP tools
         genui_agent = AssistantAgent(
             name="genui_agent",
@@ -82,14 +82,14 @@ async def setup_mcp_genui_agent():
             2. Analyze and structure the data
             3. Describe the UI components and data flow
             4. Provide the grounded data that would populate the UI
-            
+
             Focus on data-driven, factual UI generation.""",
             llm_config=llm_config,
         )
-        
+
         # Register MCP tools with the agent
         toolkit.register_for_llm(genui_agent)
-        
+
         # Create a user proxy for interaction
         user_proxy = UserProxyAgent(
             name="user",
@@ -97,13 +97,13 @@ async def setup_mcp_genui_agent():
             code_execution_config=False,
             max_consecutive_auto_reply=0,
         )
-        
+
         toolkit.register_for_execution(user_proxy)
-        
+
         print("\n" + "=" * 60)
         print("Example 1: Search and retrieve paper data")
         print("=" * 60)
-        
+
         # Example task: Search for papers and create a paper browser UI concept
         result = await user_proxy.a_initiate_chat(
             genui_agent,
@@ -112,24 +112,24 @@ async def setup_mcp_genui_agent():
             Finally, describe a UI component design that would display this paper data effectively.""",
             max_turns=5,
         )
-        
+
         print("\n" + "=" * 60)
         print("Chat completed!")
         print("=" * 60)
-        
+
         return result
 
 
 async def multi_server_example():
     """
     Example demonstrating how to use multiple MCP servers simultaneously.
-    
+
     This shows how to combine data from different sources (ArXiv + Wikipedia)
     to create rich, multi-faceted UIs.
     """
-    
+
     base_path = Path(__file__).parent.parent.parent.parent.parent
-    
+
     # Configure multiple MCP servers
     arxiv_config = StdioConfig(
         server_name="arxiv",
@@ -141,7 +141,7 @@ async def multi_server_example():
             str(base_path / ".devcontainer/generative-ui/mcp/storage/papers"),
         ],
     )
-    
+
     wikipedia_config = StdioConfig(
         server_name="wikipedia",
         command="python",
@@ -152,41 +152,41 @@ async def multi_server_example():
             str(base_path / ".devcontainer/generative-ui/mcp/storage/articles"),
         ],
     )
-    
+
     print("=" * 60)
     print("Multi-Server Example: ArXiv + Wikipedia")
     print("=" * 60)
-    
+
     from autogen.mcp.mcp_client import MCPClientSessionManager
-    
+
     manager = MCPClientSessionManager()
-    
+
     # Open both sessions
     async with manager.open_session(arxiv_config) as arxiv_session, manager.open_session(
         wikipedia_config
     ) as wiki_session:
         print("✓ Connected to MCP servers")
-        
+
         # Create toolkits from both sessions
         arxiv_toolkit = await create_toolkit(session=arxiv_session)
         wiki_toolkit = await create_toolkit(session=wiki_session)
-        
+
         print(f"✓ ArXiv toolkit: {len(arxiv_toolkit.tools)} tools")
         print(f"✓ Wikipedia toolkit: {len(wiki_toolkit.tools)} tools")
-        
+
         # Combine tools from both toolkits
         from autogen.tools import Toolkit
-        
+
         combined_toolkit = Toolkit(tools=arxiv_toolkit.tools + wiki_toolkit.tools)
-        
+
         print(f"✓ Combined toolkit: {len(combined_toolkit.tools)} tools")
-        
+
         # Create agent with combined tools
         llm_config = {
             "model": "gpt-4o-mini",
             "api_type": "openai",
         }
-        
+
         research_agent = AssistantAgent(
             name="research_agent",
             system_message="""You are a research assistant that combines academic and encyclopedic knowledge.
@@ -194,22 +194,22 @@ async def multi_server_example():
             Always cite your sources and provide comprehensive, factual information.""",
             llm_config=llm_config,
         )
-        
+
         combined_toolkit.register_for_llm(research_agent)
-        
+
         user_proxy = UserProxyAgent(
             name="user",
             human_input_mode="NEVER",
             code_execution_config=False,
             max_consecutive_auto_reply=0,
         )
-        
+
         combined_toolkit.register_for_execution(user_proxy)
-        
+
         print("\n" + "=" * 60)
         print("Example: Research task combining multiple sources")
         print("=" * 60)
-        
+
         result = await user_proxy.a_initiate_chat(
             research_agent,
             message="""Research the topic 'neural networks':
@@ -219,7 +219,7 @@ async def multi_server_example():
                the foundational concepts (from Wikipedia) and cutting-edge research (from arXiv)""",
             max_turns=8,
         )
-        
+
         return result
 
 
@@ -228,10 +228,10 @@ async def filesystem_context_example():
     Example showing how to use the filesystem MCP server to ground UI generation
     in existing documentation or content files.
     """
-    
+
     base_path = Path(__file__).parent.parent.parent.parent.parent
     context_path = base_path / ".devcontainer/generative-ui/mcp/context_docs"
-    
+
     # Create a sample context document
     context_path.mkdir(parents=True, exist_ok=True)
     sample_doc = context_path / "ui_guidelines.txt"
@@ -259,9 +259,9 @@ async def filesystem_context_example():
    - Provide refresh/reload options
 """
     )
-    
+
     print("✓ Created sample context document")
-    
+
     filesystem_config = StdioConfig(
         server_name="filesystem",
         command="python",
@@ -272,19 +272,19 @@ async def filesystem_context_example():
             str(context_path),
         ],
     )
-    
+
     from autogen.mcp.mcp_client import MCPClientSessionManager
-    
+
     manager = MCPClientSessionManager()
-    
+
     async with manager.open_session(filesystem_config) as session:
         toolkit = await create_toolkit(session=session)
-        
+
         llm_config = {
             "model": "gpt-4o-mini",
             "api_type": "openai",
         }
-        
+
         ui_designer = AssistantAgent(
             name="ui_designer",
             system_message="""You are a UI/UX designer that follows documented guidelines.
@@ -292,22 +292,22 @@ async def filesystem_context_example():
             Cite specific guidelines you're following in your designs.""",
             llm_config=llm_config,
         )
-        
+
         toolkit.register_for_llm(ui_designer)
-        
+
         user_proxy = UserProxyAgent(
             name="user",
             human_input_mode="NEVER",
             code_execution_config=False,
             max_consecutive_auto_reply=0,
         )
-        
+
         toolkit.register_for_execution(user_proxy)
-        
+
         print("\n" + "=" * 60)
         print("Example: Guideline-driven UI design")
         print("=" * 60)
-        
+
         result = await user_proxy.a_initiate_chat(
             ui_designer,
             message="""First, read the UI guidelines document.
@@ -315,30 +315,30 @@ async def filesystem_context_example():
             ensuring you follow all the guidelines you found.""",
             max_turns=5,
         )
-        
+
         return result
 
 
 async def main():
     """Run all examples."""
-    
+
     print("\n" + "=" * 60)
     print("AG2 Generative UI with MCP Integration Examples")
     print("=" * 60 + "\n")
-    
+
     try:
         # Run the basic example
         print("\n### Running Basic MCP Integration Example ###\n")
         await setup_mcp_genui_agent()
-        
+
         print("\n\n### Running Multi-Server Example ###\n")
         # Uncomment to run:
         # await multi_server_example()
-        
+
         print("\n\n### Running Filesystem Context Example ###\n")
         # Uncomment to run:
         # await filesystem_context_example()
-        
+
     except Exception as e:
         print(f"\n❌ Error: {e}")
         import traceback
@@ -350,5 +350,5 @@ if __name__ == "__main__":
     # 1. OpenAI API key set in environment (OPENAI_API_KEY)
     # 2. MCP servers to be available
     # 3. AG2 with MCP extras installed
-    
+
     asyncio.run(main())
